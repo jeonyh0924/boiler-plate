@@ -14,21 +14,24 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ROOT_DIR = BASE_DIR.parent
+
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 SECRET_JSON = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
 SECRET_KEY = SECRET_JSON['SECRET_KEY']
-DEBUG = True
 
+# 웹서버는 여기서 가져온다.
 STATICFILES_DIRS = [
     STATIC_DIR
 ]
 STATIC_URL = '/static/'
+STATIC_ROOT= os.path.join(ROOT_DIR, '.static')
 MEDIA_URL = '/media/'
+MEDIA_ROOT= os.path.join(ROOT_DIR, '.media')
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -42,7 +45,7 @@ AUTH_USER_MODEL = 'members.User'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = SECRET_JSON['S3_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = SECRET_JSON['S3_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = 'jeonyh-boiler-plate'
+AWS_STORAGE_BUCKET_NAME = SECRET_JSON['S3_BUCKET_NAME']
 AWS_AUTO_CREATE_BUCKET = True
 AWS_S3_REGION_NAME = 'ap-northeast-2'
 
@@ -89,8 +92,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
